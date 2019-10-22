@@ -25,8 +25,14 @@ class Cliente {
        $q = $this->conexao->prepare($sql);
        $q->bindParam(1, $codcli);
        $q->execute();
+  
+       $cliente = [];
        
-       return $q;
+       foreach($q as $cli){
+           $cliente = $cli;
+       }
+       
+       return $cliente;
    }
    
    public function adicionar($nomcli, $endcli, $telcli) {
@@ -42,12 +48,22 @@ class Cliente {
    }
    
    public function editar($codcli, $nomcli, $endcli, $telcli) {
-       $sql = 'UPDATE cliente SET nomcli = ?, endcli = ?, telcli = ? WHERE codcli = $codcli';
+       $sql = 'UPDATE cliente SET nomcli = ?, endcli = ?, telcli = ? WHERE codcli = ?;';
        $q = $this->conexao->prepare($sql);
        
        $q->bindParam(1, $nomcli);
        $q->bindParam(2, $endcli);
        $q->bindParam(3, $telcli);
+       $q->bindParam(4, $codcli);
+       
+       $q->execute();
+   }
+   
+   public function excluir($codcli) {
+       $sql = 'DELETE FROM cliente WHERE codcli = ?;';
+       $q = $this->conexao->prepare($sql);
+       
+       $q->bindParam(1, $codcli);
        
        $q->execute();
    }

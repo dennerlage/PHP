@@ -1,3 +1,4 @@
+<?php declare(strict_types=1) ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,7 +9,13 @@
         <?php
             require 'classes/Cliente.php';
             $cli = new Cliente();
-            $clientes = $cli->listar();  
+            $clientes = $cli->listar();
+            $eliminar = $_GET ['eliminar'];
+            if(isset($eliminar)){
+                header('Location:index.php');
+                $cli->excluir($eliminar);
+                unset($eliminar);
+            }
         ?>
         <a href='adicionar.php'>Novo Cliente</a>
         <table>
@@ -28,7 +35,10 @@
                     <td><?php echo $c ['endcli']; ?></td>
                     <td><?php echo $c ['telcli']; ?></td>
                     <td>
-                        <button onclick="<?php header('Location:editar.php');?>" type="button">Editar</button>
+                        <a href="editar.php?cod=<?php echo $c ['codcli'] ?>"><button type="button">Editar</button></a>
+                    </td>
+                    <td>
+                        <a href="index.php?eliminar=<?php echo $c ['codcli'] ?>"><button type="button">Excluir</button></a>
                     </td>
                 </tr>  
                 <?php } ?>
